@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 universidades</title>
+    <style>
+        /* --- VARIABLES PARA EL EFECTO DARK MODE --- */
+        :root {
+            --bg-color: #D9B0A0; /* Color de fondo otoñal original */
+            --text-color: #333333;
+            --section-bg: #380702;
+            --table-text: #000000;
+            --tr-even: #f9f9f9;
+            --tr-odd: #ffffff;
+            --card-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1210; /* Fondo oscuro con matiz terracota profundo */
+            --text-color: #f5ebe6;
+            --section-bg: #210401;
+            --table-text: #ffffff;
+            --tr-even: #2d1f1d;
+            --tr-odd: #1f1412;
+            --card-bg: #2a1b18;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        nav {
+            width: 100%;
+            text-align: center;
+            background-color: #7C3230; /* Corrección de la 'O' por '0' */
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        /* --- BOTONES CON INTERACTIVIDAD Y EFECTO ONDA (RIPPLE) --- */
+        .btn-interactivo {
+            position: relative;
+            overflow: hidden;
+            background-color: #380702;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-interactivo:hover {
+            background-color: #550b03;
+        }
+
+        .btn-interactivo:active {
+            transform: scale(0.98);
+        }
+
+        /* La onda generada por JS */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        section {
+            background-color: var(--section-bg);
+            width: 60%;
+            margin: auto;
+            margin-top: 40px;
+            font-size: 1.2em;
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background-color: var(--card-bg);
+            color: var(--table-text);
+        }
+        
+        th, td {
+            border: 2px solid #000000;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #7C3230;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--tr-even);
+        }
+        tr:nth-child(odd) {
+            background-color: var(--tr-odd);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 20px;
+        }
+        
+        h2, h3 {
+            color: #7C3230;
+            margin-top: 30px;
+        }
+
+        [data-theme="dark"] h2, [data-theme="dark"] h3 {
+            color: #e67e65; /* Color terracota más claro para contraste en modo oscuro */
+        }
+        
+        /* --- GALERÍA LIGHTBOX --- */
+        img {
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.03);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox img {
+            max-width: 85%;
+            max-height: 85%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        iframe {
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            max-width: 100%;
+        }
+
+        /* --- GENERADOR DE PALETA DE COLORES --- */
+        .color-generator {
+            background-color: var(--card-bg);
+            border: 2px solid #7C3230;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .palette-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .color-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+            font-size: 0.8rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-weight: bold;
+        }
+
+        /* --- CARRITO DE COMPRAS (Fichas de Inscripción/Informes) --- */
+        .cart-section {
+            background-color: var(--card-bg);
+            border: 2px solid #7C3230;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+            color: var(--table-text);
+        }
+
+        .btn-add-cart {
+            background-color: #7C3230;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* --- FORMULARIO DE REGISTRO --- */
+        .register-section {
+            background-color: var(--card-bg);
+            border: 2px solid #7C3230;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px auto;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            padding: 0 0 5px 0;
+            color: var(--text-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: var(--tr-odd);
+            color: var(--text-color);
+        }
+        
+        footer {
+            margin-top: 50px;
+        }
+        
+        footer div {
+            background-color: #7C3230;
+            text-align: center;
+            padding: 20px;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <button class="btn-interactivo" id="btn-theme">🌓 Cambiar Modo</button>
+        <a href="#generador" class="btn-interactivo" style="text-decoration: none; display: inline-block; line-height: 20px;">🎨 Paleta</a>
+        <a href="#carrito" class="btn-interactivo" style="text-decoration: none; display: inline-block; line-height: 20px;">🛒 Carrito (<span id="cart-count">0</span>)</a>
+        <a href="#registro" class="btn-interactivo" style="text-decoration: none; display: inline-block; line-height: 20px;">📝 Registro</a>
+    </nav>
+
+    <h1>15 UNIVERSIDADES QUE TE PODRÍAN INTERESAR</h1>
+
+    <h4 style="text-align: center; color: #666;">"Lo maravilloso de aprender es que nadie puede arrebatártelo."</h4>
+
+    <h2>Universidades en México</h2>
+    
+    <h3>Instituto Politécnico Nacional (IPN)</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Programas académicos</th>
+            <th>Tres carreras de interés</th>
+            <th>Requisitos</th>
+            <th>Ubicación</th>
+            <th>Acción</th>
+        </tr>
+        <tr>
+            <td>Pública</td>
+            <td>Ingeniería, Ciencias Médico-Biológicas, Ciencias Sociales y Administrativas.</td>
+            <td>Ingeniería Aeronáutica, Biónica, Medicina y Cirugía.</td>
+            <td>Examen de admisión institucional y certificado de bachillerato.</td>
+            <td>Ciudad de México, México (Unidad Zacatenco/Santo Tomás)</td>
+            <td><button class="btn-add-cart" onclick="agregarAlCarrito('Ficha de Admisión - IPN', 450)">Apartar Ficha ($450)</button></td>
+        </tr>
+    </table>
+    <img src="https://www.ipn.mx/assets/files/imageninstitucional/img/comunicados/2022/11/tarjeta-179-1.jpg" alt="Instituto Politécnico Nacional" width="500" height="300">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3760.927889912186!2d-99.14271012602256!3d19.501737981792484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1f9b5d8c54c1b%3A0x954022f561b19ac8!2sINSTITUTO%20POLIT%C3%89CNICO%20NACIONAL!5e0!3m2!1ses!2smx!4v1773364590668!5m2!1ses!2smx" width="500" height="450" allowfullscreen="" loading="lazy"></iframe>
+
+    <h3>Universidad Nacional Autónoma de México (UNAM)</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Programas académicos</th>
+            <th>Tres carreras de interés</th>
+            <th>Requisitos</th>
+            <th>Ubicación</th>
+            <th>Acción</th>
+        </tr>
+        <tr>
+            <td>Pública</td>
+            <td>Más de 130 licenciaturas en áreas de Humanidades, Ciencias Sociales, Ciencias Exactas y Artes.</td>
+            <td>Medicina, Derecho, Arquitectura.</td>
+            <td>Examen de selección (concurso), promedio mínimo de 7.0 en bachillerato o pase reglamentado para alumnos de ENP/CCH.</td>
+            <td>Ciudad de México, México (Ciudad Universitaria).</td>
+            <td><button class="btn-add-cart" onclick="agregarAlCarrito('Guía de Estudio - UNAM', 200)">Comprar Guía ($200)</button></td>
+        </tr>
+    </table>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAH0Jh9suJdQ2FhjlI0m-zDN0BLWnQEwymQA&s.jpg" alt="Universidad Nacional Autónoma de México" width="500" height="300">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.9655221832872!2d-99.18926043041405!3d19.32730234199252!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ce00071fca0bad%3A0x9989fa5b4f526717!2sUniversidad%20Nacional%20Aut%C3%B3noma%20de%20M%C3%A9xico!5e0!3m2!1ses!2smx!4v1773364675462!5m2!1ses!2smx" width="500" height="450" allowfullscreen="" loading="lazy"></iframe>
+
+    <h3>Tecnológico de Monterrey (ITESM)</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Programas académicos</th>
+            <th>Tres carreras de interés</th>
+            <th>Requisitos</th>
+            <th>Ubicación</th>
+            <th>Acción</th>
+        </tr>
+        <tr>
+            <td>Privada</td>
+            <td>Negocios, Ingeniería, Innovación y Transformación, Salud, Industrias Creativas.</td>
+            <td>Negocios Internacionales, Ingeniería en Mecatrónica, Biotecnología.</td>
+            <td>Prueba de Aptitud Académica (PAA), currículum (ensayo y logros), y entrevista (en algunos casos).</td>
+            <td>Monterrey, Nuevo León, México</td>
+            <td><button class="btn-add-cart" onclick="agregarAlCarrito('Prospecto - ITESM', 0)">Pedir Informes (Gratis)</button></td>
+        </tr>
+    </table>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCg5AxSy3Xuv1RaqEBVDFMDK-_uMgy3scUCA&s.jpg" alt="Tecnológico de Monterrey" width="500" height="300">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60140.72706274299!2d-99.29507366874998!3d19.5932625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21db668855ad3%3A0xee1a52e08e9baf1!2sTecnol%C3%B3gico%20Monterrey!5e0!3m2!1ses!2smx!4v1773364719860!5m2!1ses!2smx" width="500" height="450" allowfullscreen="" loading="lazy"></iframe>
+
+
+    <hr style="margin-top: 50px; border: 1px solid #7C3230;">
+    
+    <div class="color-generator" id="generador">
+        <h2>🎨 Generador de Paletas de Colores Otoñales</h2>
+        <p>Genera combinaciones armónicas inspiradas en el diseño del sitio.</p>
+        <div class="palette-container" id="palette">
+            </div>
+        <button class="btn-interactivo" onclick="generarPaleta()">Generar Nueva Paleta</button>
+    </div>
+
+    <div class="cart-section" id="carrito">
+        <h2>🛒 Carrito de Trámites Universitarios</h2>
+        <p>Agrega guías, fichas o solicitudes desde las tablas de arriba.</p>
+        <ul class="cart-items" id="cart-list">
+            <li style="color: gray; text-align: center;">El carrito está vacío.</li>
+        </ul>
+        <div style="text-align: right; margin-top: 15px; font-weight: bold; color: var(--text-color);">
+            Total: $<span id="cart-total">0</span> MXN
+        </div>
+        <button class="btn-interactivo" style="width: 100%; margin-top: 10px;" onclick="vaciarCarrito()">Vaciar Carrito</button>
+    </div>
+
+    <div class="register-section" id="registro">
+        <h2>📝 Registro de Aspirante</h2>
+        <form id="registrationForm" onsubmit="validarFormulario(event)">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" required placeholder="Tu nombre...">
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" required placeholder="ejemplo@correo.com">
+            </div>
+            <div class="form-group">
+                <label for="interes">Área de Mayor Interés:</label>
+                <select id="interes">
+                    <option value="Ingeniería y Biónica">Ingeniería (Biónica, Mecánica, Aeronáutica)</option>
+                    <option value="Ciencias de la Salud">Ciencias de la Salud (Medicina, Nutrición)</option>
+                    <option value="Diseño y Arte">Diseño y Arte Gráfico</option>
+                    <option value="Ciencias Sociales">Ciencias Sociales y Derecho</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-interactivo" style="width: 100%;">Enviar Registro</button>
+        </form>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="cerrarLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Zoom">
+    </div>
+
+    <footer>
+        <div>
+            <p>Derechos de autor © 2026 - Sitio web</p>
+            <p>Contáctanos: info@misitioweb.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. EFECTO ONDA (RIPPLE EFFECT) EN BOTONES
+        document.querySelectorAll('.btn-interactivo').forEach(button => {
+            button.addEventListener('click', function(e) {
+                let x = e.clientX - e.target.getBoundingClientRect().left;
+                let y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                let ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // 2. EFECTO DARK MODE
+        const btnTheme = document.getElementById('btn-theme');
+        btnTheme.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        });
+
+        // 3. GALERÍA LIGHTBOX
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        document.querySelectorAll('img').forEach(image => {
+            // Evitamos que la imagen del lightbox active su propio clon
+            if(image.id !== 'lightbox-img') {
+                image.addEventListener('click', () => {
+                    lightbox.style.display = 'flex';
+                    lightboxImg.src = image.src;
+                });
+            }
+        });
+
+        function cerrarLightbox() {
+            lightbox.style.display = 'none';
+        }
+
+        // 4. GENERADOR DE PALETA DE COLORES OTOÑALES
+        function generarPaleta() {
+            const paletteContainer = document.getElementById('palette');
+            paletteContainer.innerHTML = '';
+            
+            // Base de tonos cálidos y otoñales (Terracota, ocres, cafés, cremas)
+            const basesOtoñales = [
+                ['#7C3230', '#D9B0A0', '#380702', '#F5EBE6', '#A65B46'],
+                ['#8C4F2B', '#D9965B', '#401F13', '#F2E8DF', '#BF7343'],
+                ['#59220E', '#A66E4E', '#260B01', '#EBF2EE', '#733719'],
+                ['#A64B2A', '#D9A073', '#591E0B', '#F2DEC9', '#D96E48']
+            ];
+            
+            // Seleccionar un set aleatorio
+            const seleccionada = basesOtoñales[Math.floor(Math.random() * basesOtoñales.length)];
+            
+            seleccionada.forEach(color => {
+                const box = document.createElement('div');
+                box.classList.add('color-box');
+                box.style.backgroundColor = color;
+                box.innerText = color;
+                paletteContainer.appendChild(box);
+            });
+        }
+        // Ejecutar una vez al cargar la página
+        generarPaleta();
+
+        // 5. CARRITO DE COMPRAS (Fichas e informes)
+        let carrito = [];
+        
+        function agregarAlCarrito(nombre, precio) {
+            carrito.push({ nombre, precio });
+            actualizarCarrito();
+        }
+
+        function vaciarCarrito() {
+            carrito = [];
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const cartList = document.getElementById('cart-list');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartCount.innerText = carrito.length;
+            
+            if (carrito.length === 0) {
+                cartList.innerHTML = '<li style="color: gray; text-align: center;">El carrito está vacío.</li>';
+                cartTotal.innerText = '0';
+                return;
+            }
+            
+            cartList.innerHTML = '';
+            let total = 0;
+            
+            carrito.forEach((item, index) => {
+                total += item.precio;
+                const li = document.createElement('li');
+                li.classList.add('cart-item');
+                li.innerHTML = `
+                    <span>${item.nombre}</span>
+                    <span>$${item.precio} MXN <button onclick="eliminarItem(${index})" style="background:none; border:none; color:red; cursor:pointer; font-weight:bold; margin-left:10px;">X</button></span>
+                `;
+                cartList.appendChild(li);
+            });
+            
+            cartTotal.innerText = total;
+        }
+
+        function eliminarItem(index) {
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        // 6. FORMULARIO DE REGISTRO CON VALIDACIÓN
+        function validarFormulario(event) {
+            event.preventDefault(); // Evita que se recargue la página automáticamente
+            
+            const nombre = document.getElementById('nombre').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const interes = document.getElementById('interes').value;
+            
+            if (nombre.length < 4) {
+                alert('Por favor, introduce tu nombre completo.');
+                return;
+            }
+            
+            // Simulación de envío de datos exitoso
+            alert(`¡Registro Exitoso!\n\nAspirante: ${nombre}\nCorreo: ${correo}\nÁrea asignada: ${interes}\n\nPronto te enviaremos información detallada a tu correo.`);
+            document.getElementById('registrationForm').reset();
+        }
+    </script>
+</body>
+</html>
